@@ -1,0 +1,788 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              AROGYAAI — COMPLETE PAGE FLOW & NAVIGATION STRUCTURE            ║
+║                        Platform Architecture Document                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 1 — MAIN USER FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ Cold Launch ]
+        ↓
+  Loading Screen
+        ↓
+  ┌─────────────────────────────────────┐
+  │  Token check                        │
+  ├─────────────────────────────────────┤
+  │  Valid session  →  Main Dashboard   │
+  │  No session     →  Landing Page     │
+  └─────────────────────────────────────┘
+        ↓ (no session)
+  Landing Page
+        ↓
+  ┌──────────────────────────────────────────┐
+  │  User choice                             │
+  ├──────────────────────────────────────────┤
+  │  New user     →  Sign Up                 │
+  │  Returning    →  Login                   │
+  │  Read more    →  Terms / Privacy Policy  │
+  └──────────────────────────────────────────┘
+        ↓ (new user path)
+  Sign Up
+        ↓
+  Email Verification
+        ↓
+  Account Created / Welcome
+        ↓
+  ─────── ONBOARDING SEQUENCE ───────
+        ↓
+  Onboarding Step 1 — Basic Profile
+        ↓
+  Onboarding Step 2 — Medical History
+        ↓
+  Onboarding Step 3 — Lifestyle Assessment
+        ↓
+  Onboarding Step 4 — Device Connection
+        ↓
+  Onboarding Summary
+        ↓
+  Onboarding Completion
+        ↓
+  ─────── CORE PLATFORM ───────
+        ↓
+  Main Dashboard                         ← All authenticated flows land here
+        ↓
+  [ User navigates to any module ]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 2 — AUTHENTICATION FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2.1  NEW USER REGISTRATION
+─────────────────────────────────────────────────────────────────────────────
+
+  Landing Page
+        ↓
+  Sign Up
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  Pre-submit actions                         │
+  ├─────────────────────────────────────────────┤
+  │  Read terms      →  Terms of Service        │
+  │  Read policy     →  Privacy Policy          │
+  │  Consent toggle  →  Data Consent            │
+  └─────────────────────────────────────────────┘
+        ↓ (submit)
+  Email Verification
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  Email link clicked  →  Account Created     │
+  │  Link expired        →  Resend verification │
+  │                          ↓                  │
+  │                       Email Verification    │
+  └─────────────────────────────────────────────┘
+        ↓ (verified)
+  Account Created / Welcome
+        ↓
+  Onboarding Step 1 — Basic Profile
+
+
+2.2  RETURNING USER LOGIN
+─────────────────────────────────────────────────────────────────────────────
+
+  Landing Page
+        ↓
+  Login
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  Credentials valid     →  Main Dashboard    │
+  │  Credentials invalid   →  Login (error)     │
+  │  Forgot password       →  Forgot Password   │
+  │  No account            →  Sign Up           │
+  └─────────────────────────────────────────────┘
+
+
+2.3  PASSWORD RECOVERY
+─────────────────────────────────────────────────────────────────────────────
+
+  Login
+        ↓
+  Forgot Password
+        ↓
+  [ Reset email sent to user ]
+        ↓
+  Reset Password                ← user clicks email link
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  Reset success   →  Login                   │
+  │  Token expired   →  Forgot Password (retry) │
+  └─────────────────────────────────────────────┘
+        ↓ (success)
+  Login
+        ↓
+  Main Dashboard
+
+
+2.4  LOGOUT FLOW
+─────────────────────────────────────────────────────────────────────────────
+
+  Settings Hub
+        ↓
+  Logout Confirmation
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  Confirm   →  [ clear session ]             │
+  │               ↓                             │
+  │            Landing Page                     │
+  │  Cancel    →  Settings Hub                  │
+  └─────────────────────────────────────────────┘
+
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 3 — DASHBOARD NAVIGATION FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Main Dashboard
+  │
+  ├──→  Dashboard Alternate View
+  │           ↓
+  │       [ toggle back ]  →  Main Dashboard
+  │
+  ├──→  AI Health Insights            (Health Intelligence module)
+  │
+  ├──→  Disease Simulator             (Health Intelligence module)
+  │
+  ├──→  Health Timeline               (Health Intelligence module)
+  │
+  ├──→  Lab Test Results              (Medical Data module)
+  │
+  ├──→  Sleep Analysis                (Medical Data module)
+  │
+  ├──→  Device Manager                (Medical Data module)
+  │
+  ├──→  Upload Medical Report         (Medical Data module)
+  │
+  ├──→  Book Consultation             (Consultation module)
+  │
+  ├──→  Notification Centre           (Notifications module)
+  │
+  ├──→  Settings Hub                  (Settings module)
+  │
+  └──→  What's New                    (System module)
+
+
+  Dashboard Alternate View
+  │
+  ├──→  Main Dashboard                (view toggle)
+  ├──→  AI Health Insights
+  └──→  Health Timeline
+
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 4 — HEALTH INTELLIGENCE FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4.1  MAIN HEALTH INTELLIGENCE FLOW
+─────────────────────────────────────────────────────────────────────────────
+
+  Main Dashboard
+        ↓
+  AI Health Insights
+  │
+  ├──→  AI Insights Desktop Layout    ← responsive breakpoint (≥1024px)
+  │           ↓
+  │       AI Health Insights          (back to mobile)
+  │
+  ├──→  Risk Explanation
+  │           ↓
+  │       ├──→  Disease Simulator
+  │       ├──→  Preventive Recommendations
+  │       └──→  Book Consultation
+  │
+  ├──→  Disease Simulator
+  │           ↓
+  │       ├──→  AI Risk Report
+  │       │         ↓
+  │       │     ├──→  Book Consultation
+  │       │     └──→  Preventive Recommendations
+  │       │
+  │       └──→  Preventive Recommendations
+  │
+  ├──→  Health Timeline
+  │           ↓
+  │       ├──→  Alert Details
+  │       ├──→  Lab Test Results
+  │       └──→  Sleep Analysis
+  │
+  ├──→  Preventive Recommendations
+  │           ↓
+  │       ├──→  Book Consultation
+  │       ├──→  Lab Test Results
+  │       └──→  Disease Simulator
+  │
+  └──→  Book Consultation
+
+
+4.2  RISK EXPLANATION DETAIL FLOW
+─────────────────────────────────────────────────────────────────────────────
+
+  AI Health Insights
+        ↓
+  Risk Explanation                ← SHAP factor breakdown + RAG evidence
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  User action                                │
+  ├─────────────────────────────────────────────┤
+  │  Simulate changes   →  Disease Simulator    │
+  │  View actions       →  Preventive Recs      │
+  │  Book doctor        →  Book Consultation    │
+  │  Go back            →  AI Health Insights   │
+  └─────────────────────────────────────────────┘
+
+
+4.3  AI RISK REPORT FLOW
+─────────────────────────────────────────────────────────────────────────────
+
+  Disease Simulator
+        ↓
+  AI Risk Report                  ← downloadable PDF summary
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  Book consultation  →  Book Consultation    │
+  │  View recs          →  Preventive Recs      │
+  │  Back to dashboard  →  Main Dashboard       │
+  └─────────────────────────────────────────────┘
+
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 5 — MEDICAL DATA FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5.1  LAB REPORT UPLOAD FLOW
+─────────────────────────────────────────────────────────────────────────────
+
+  Main Dashboard  /  Lab Test Results  /  Medical Reports
+        ↓
+  Upload Medical Report           ← drag-and-drop PDF / image
+        ↓
+  Report Processing               ← OCR + biomarker extraction (polling)
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  OCR success   →  Upload Success            │
+  │  OCR failure   →  500 Error Page            │
+  │                   ↓                         │
+  │                Upload Medical Report (retry)│
+  └─────────────────────────────────────────────┘
+        ↓ (success)
+  Upload Success
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  View results   →  Lab Test Results         │
+  │  View insights  →  AI Health Insights       │
+  │  View reports   →  Medical Reports          │
+  └─────────────────────────────────────────────┘
+
+
+5.2  LAB RESULTS NAVIGATION FLOW
+─────────────────────────────────────────────────────────────────────────────
+
+  Lab Test Results
+  │
+  ├──→  Medical Reports
+  │         ↓
+  │     ├──→  Upload Medical Report
+  │     └──→  Lab Test Results       (back)
+  │
+  ├──→  Upload Medical Report
+  └──→  AI Health Insights
+
+
+5.3  SLEEP ANALYSIS FLOW
+─────────────────────────────────────────────────────────────────────────────
+
+  Main Dashboard  /  Health Timeline  /  AI Health Insights
+        ↓
+  Sleep Analysis
+  │
+  ├──→  AI Health Insights          (view risk impact)
+  ├──→  Preventive Recommendations  (sleep-related actions)
+  └──→  Device Manager              (check data source)
+
+
+5.4  DEVICE MANAGEMENT FLOW
+─────────────────────────────────────────────────────────────────────────────
+
+  Main Dashboard  /  Sleep Analysis  /  Onboarding Step 4
+        ↓
+  Device Manager
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  Configure device   →  Device Settings      │
+  │                         ↓                   │
+  │                      Device Manager (back)  │
+  │  Re-connect         →  Onboarding Step 4    │
+  └─────────────────────────────────────────────┘
+
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 6 — CONSULTATION FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [ Entry points ]
+  AI Health Insights
+  Risk Explanation
+  Preventive Recommendations
+  AI Risk Report
+  Emergency Alert
+  Alert Details
+        ↓
+  Book Consultation               ← filter by speciality, availability, rating
+        ↓
+  Doctor Profile                  ← bio, qualifications, slot picker
+        ↓
+  Appointment Confirmation        ← booking details, add to calendar
+        ↓
+  ┌─────────────────────────────────────────────┐
+  │  View history   →  Consultation History     │
+  │                     ↓                       │
+  │                 ├──→  Doctor Profile        │
+  │                 └──→  Book Consultation     │
+  │  Back to dash   →  Main Dashboard           │
+  │  Notification   →  Notification Centre      │
+  └─────────────────────────────────────────────┘
+
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 7 — SETTINGS FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Main Dashboard
+        ↓
+  Settings Hub
+  │
+  ├──→  User Profile
+  │         ↓
+  │     [ edit & save ]  →  Settings Hub
+  │
+  ├──→  Security Audit
+  │         ↓
+  │     ├──→  Change Password
+  │     │         ↓
+  │     │     [ changed ]  →  Login        ← forced re-auth
+  │     │
+  │     └──→  Login                        ← force logout all sessions
+  │
+  ├──→  Data Privacy
+  │         ↓
+  │     ├──→  Privacy Policy
+  │     │         ↓
+  │     │     Data Consent  →  Settings Hub
+  │     │
+  │     ├──→  Data Consent
+  │     │         ↓
+  │     │     Settings Hub
+  │     │
+  │     └──→  Delete Account
+  │               ↓
+  │           Logout Confirmation  →  Landing Page
+  │
+  ├──→  Notification Settings
+  │         ↓
+  │     [ save preferences ]  →  Settings Hub
+  │
+  ├──→  Change Password
+  │         ↓
+  │     [ changed ]  →  Login
+  │
+  ├──→  Delete Account
+  │         ↓
+  │     Logout Confirmation  →  Landing Page
+  │
+  ├──→  Consultation History
+  │         ↓
+  │     ├──→  Doctor Profile
+  │     └──→  Book Consultation
+  │
+  ├──→  Help Center Home
+  │
+  ├──→  What's New
+  │         ↓
+  │     Main Dashboard
+  │
+  └──→  Logout Confirmation
+            ↓
+        Landing Page
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 8 — NOTIFICATION FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [ Triggers ]
+  Push notification tap (any page)
+  Main Dashboard notification icon
+  Appointment Confirmation
+        ↓
+  Notification Centre
+  │
+  ├──→  Alert Details
+  │         ↓
+  │     ├──→  AI Health Insights
+  │     ├──→  Risk Explanation
+  │     ├──→  Book Consultation
+  │     └──→  Main Dashboard
+  │
+  ├──→  Emergency Alert             ← critical severity only
+  │         ↓
+  │     ├──→  Book Consultation
+  │     ├──→  Emergency Services    ← external tel: link
+  │     └──→  Main Dashboard
+  │
+  ├──→  Notification History
+  │         ↓
+  │     Alert Details
+  │         ↓
+  │     [ same exits as Alert Details above ]
+  │
+  └──→  Notification Settings       ← manage preferences
+            ↓
+        Settings Hub
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 9 — ONBOARDING FLOW (DETAILED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Account Created / Welcome
+        ↓
+  Onboarding Step 1 — Basic Profile         [ progress 1 / 6 ]
+  │
+  ├──→  Data Consent                        ← triggered if not yet accepted
+  │         ↓
+  │     Onboarding Step 1 (resume)
+  │
+  └──→  Onboarding Step 2 — Medical History
+            ↓ [ progress 2 / 6 ]
+        Onboarding Step 3 — Lifestyle Assessment
+            ↓ [ progress 3 / 6 ]
+        Onboarding Step 4 — Device Connection   ← skippable
+        │
+        ├──→  [ skip ]  →  Onboarding Summary
+        │
+        └──→  [ connect ]
+                  ↓
+              Device auth (OAuth / health API)
+                  ↓
+              Onboarding Step 4 (confirmed)   [ progress 4 / 6 ]
+                  ↓
+        Onboarding Summary                    [ progress 5 / 6 ]
+        │
+        ├──→  [ edit section ]  →  respective onboarding step
+        │                              ↓
+        │                         Onboarding Summary (return)
+        │
+        └──→  [ confirm ]
+                  ↓
+        Onboarding Completion               [ progress 6 / 6 ]
+                  ↓
+        [ ML initial models computed ]
+                  ↓
+        Main Dashboard
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 10 — HELP CENTER FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [ Entry points ]
+  Landing Page  /  Login  /  Settings Hub
+        ↓
+  Help Center Home
+  │
+  ├──→  Help Center Search
+  │         ↓
+  │     ┌──────────────────────────────────────────┐
+  │     │  Results found    →  Help Center Article │
+  │     │  No results       →  Help Center Home    │
+  │     └──────────────────────────────────────────┘
+  │
+  └──→  Help Center Article
+            ↓
+        ┌──────────────────────────────────────────┐
+        │  Related article  →  Help Center Article  │
+        │  Need more help   →  Book Consultation    │
+        │  Back             →  Help Center Home     │
+        └──────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 11 — LEGAL & COMPLIANCE FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [ Entry points ]
+  Landing Page  /  Sign Up  /  Settings Hub  /  Data Privacy
+        ↓
+  Terms of Service
+        ↓
+  [ accept ]  →  Sign Up  /  Landing Page
+
+
+  [ Entry points ]
+  Landing Page  /  Sign Up  /  Data Privacy
+        ↓
+  Privacy Policy
+        ↓
+  Data Consent
+        ↓
+  ┌──────────────────────────────────────────┐
+  │  During signup     →  Sign Up (resume)   │
+  │  During onboard    →  Onboarding Step 1  │
+  │  From settings     →  Settings Hub       │
+  └──────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 12 — SYSTEM & ERROR FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Loading Screen
+        ↓
+  ┌──────────────────────────────────────────────┐
+  │  Auth token valid     →  Main Dashboard      │
+  │  No token             →  Landing Page        │
+  │  Server unreachable   →  Maintenance Page    │
+  └──────────────────────────────────────────────┘
+
+
+  404 Error Page                ← invalid / broken URL
+        ↓
+  ┌──────────────────────────────────────────────┐
+  │  Authenticated user   →  Main Dashboard      │
+  │  Guest user           →  Landing Page        │
+  └──────────────────────────────────────────────┘
+
+
+  500 Error Page                ← server error / crash
+        ↓
+  ┌──────────────────────────────────────────────┐
+  │  Retry               →  previous page        │
+  │  Check status        →  System Status        │
+  │  Go home             →  Landing Page         │
+  └──────────────────────────────────────────────┘
+
+
+  Maintenance Page              ← server maintenance flag
+        ↓
+  ┌──────────────────────────────────────────────┐
+  │  Maintenance ends    →  Landing Page         │
+  │  Status page         →  System Status        │
+  └──────────────────────────────────────────────┘
+
+
+  System Status                 ← triggered by any service outage
+        ↓
+  ┌──────────────────────────────────────────────┐
+  │  All services healthy  →  previous page      │
+  │  Partial outage        →  System Status      │
+  │  Full outage           →  Maintenance Page   │
+  └──────────────────────────────────────────────┘
+
+
+  What's New                    ← version badge on dashboard
+        ↓
+  ┌──────────────────────────────────────────────┐
+  │  Dismiss / read      →  Main Dashboard       │
+  └──────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 13 — CONDITIONAL FLOWS & GUARD RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  AUTHENTICATION GUARD
+  ─────────────────────────────────────────────────────────────────────────
+  Any protected page accessed without session
+        ↓
+  Redirect  →  Login
+        ↓
+  Post-login redirect  →  originally requested page
+
+
+  ONBOARDING GUARD
+  ─────────────────────────────────────────────────────────────────────────
+  Authenticated user with incomplete onboarding accesses Dashboard
+        ↓
+  Redirect  →  last incomplete onboarding step
+
+
+  EMAIL VERIFICATION GUARD
+  ─────────────────────────────────────────────────────────────────────────
+  Login attempt with unverified email
+        ↓
+  Redirect  →  Email Verification
+        ↓
+  Resend option available
+
+
+  DEVICE CONNECTION (OPTIONAL STEP)
+  ─────────────────────────────────────────────────────────────────────────
+  Onboarding Step 4 — Device Connection
+        ↓
+  ┌──────────────────────────────────────────┐
+  │  Skip      →  Onboarding Summary         │
+  │  Connect   →  OAuth / Health API         │
+  │               ↓                          │
+  │            Success  →  Onboarding Summ.  │
+  │            Fail     →  Step 4 (retry)    │
+  └──────────────────────────────────────────┘
+
+
+  EMERGENCY ALERT ESCALATION
+  ─────────────────────────────────────────────────────────────────────────
+  Anomaly detection fires critical severity alert
+        ↓
+  Push notification dispatched
+        ↓
+  User taps  →  Emergency Alert (full-screen)
+        ↓
+  ┌──────────────────────────────────────────┐
+  │  Call emergency    →  tel: (external)    │
+  │  Book doctor       →  Book Consultation  │
+  │  Dismiss           →  confirmation modal │
+  │                       ↓                  │
+  │                    Main Dashboard        │
+  └──────────────────────────────────────────┘
+
+
+  RESPONSIVE LAYOUT SWITCH
+  ─────────────────────────────────────────────────────────────────────────
+  AI Health Insights — viewport ≥ 1024px
+        ↓
+  Auto-render  →  AI Insights Desktop Layout
+        ↓
+  Viewport < 1024px
+        ↓
+  Auto-render  →  AI Health Insights (mobile)
+
+
+  REPORT PROCESSING FAILURE
+  ─────────────────────────────────────────────────────────────────────────
+  Upload Medical Report  →  Report Processing
+        ↓
+  ┌──────────────────────────────────────────┐
+  │  OCR success       →  Upload Success     │
+  │  OCR timeout       →  500 Error Page     │
+  │                       ↓                  │
+  │                    Upload Medical Report  │
+  │  User cancels      →  Lab Test Results   │
+  └──────────────────────────────────────────┘
+
+
+  PASSWORD CHANGE SESSION KILL
+  ─────────────────────────────────────────────────────────────────────────
+  Change Password (success)
+        ↓
+  [ all sessions invalidated ]
+        ↓
+  Redirect  →  Login                ← re-auth required
+
+
+  DATA CONSENT GATE
+  ─────────────────────────────────────────────────────────────────────────
+  Sign Up  /  Onboarding Step 1
+        ↓
+  ┌──────────────────────────────────────────┐
+  │  Consent given    →  continue flow       │
+  │  Consent refused  →  cannot proceed      │
+  │                      show explanation    │
+  │                      re-prompt consent   │
+  └──────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SECTION 14 — COMPLETE PAGE CONNECTION MATRIX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  PAGE                        │  ENTRY FROM                  │  EXITS TO
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Loading Screen              │  App cold launch             │  Landing Page, Main Dashboard
+  Landing Page                │  Loading Screen, Logout      │  Login, Sign Up, Terms, Privacy
+  Sign Up                     │  Landing Page, Login         │  Email Verification, Terms, Privacy
+  Email Verification          │  Sign Up                     │  Account Created
+  Account Created             │  Email Verification          │  Onboarding Step 1
+  Login                       │  Landing Page, Reset Pwd     │  Main Dashboard, Forgot Password
+  Forgot Password             │  Login                       │  Reset Password
+  Reset Password              │  Forgot Password (email)     │  Login
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Onboarding Step 1           │  Account Created             │  Step 2, Data Consent
+  Onboarding Step 2           │  Step 1                      │  Step 3
+  Onboarding Step 3           │  Step 2                      │  Step 4
+  Onboarding Step 4           │  Step 3, Device Manager      │  Onboarding Summary
+  Onboarding Summary          │  Step 4                      │  Onboarding Completion, any Step
+  Onboarding Completion       │  Onboarding Summary          │  Main Dashboard
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Main Dashboard              │  Login, Onboarding, Loading  │  All primary module pages
+  Dashboard Alternate View    │  Main Dashboard              │  Main Dashboard, AI Insights
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  AI Health Insights          │  Dashboard, Alert Details    │  Risk Explanation, Simulator,
+                              │                              │  Timeline, Preventive Recs,
+                              │                              │  Book Consult, AI Risk Report
+  AI Insights Desktop Layout  │  AI Health Insights (≥1024)  │  AI Health Insights
+  Risk Explanation            │  AI Health Insights          │  Simulator, Preventive Recs,
+                              │                              │  Book Consultation
+  Disease Simulator           │  AI Insights, Risk Explan.   │  AI Risk Report, Preventive Recs
+  AI Risk Report              │  Disease Simulator           │  Book Consultation, Preventive
+  Preventive Recommendations  │  Risk Expl., Simulator,      │  Book Consult, Lab Results,
+                              │  AI Insights, AI Risk Report │  Disease Simulator
+  Health Timeline             │  Dashboard, AI Insights      │  Alert Details, Lab Results,
+                              │                              │  Sleep Analysis
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Lab Test Results            │  Dashboard, Preventive Recs  │  Medical Reports, Upload Report,
+                              │  Upload Success, Timeline    │  AI Health Insights
+  Medical Reports             │  Lab Test Results            │  Upload Report, Lab Results
+  Sleep Analysis              │  Dashboard, Timeline,        │  AI Health Insights, Device Mgr,
+                              │  AI Health Insights          │  Preventive Recs
+  Device Manager              │  Dashboard, Sleep Analysis   │  Device Settings, Onboarding S4
+  Device Settings             │  Device Manager              │  Device Manager
+  Upload Medical Report       │  Lab Results, Medical Rpts   │  Report Processing
+  Report Processing           │  Upload Medical Report       │  Upload Success, 500 Error
+  Upload Success              │  Report Processing           │  Lab Results, AI Insights
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Book Consultation           │  AI Insights, Risk Expl.,    │  Doctor Profile
+                              │  Preventive Recs, Emergency  │
+  Doctor Profile              │  Book Consultation,          │  Appointment Confirmation
+                              │  Consultation History        │
+  Appointment Confirmation    │  Doctor Profile              │  Consultation History, Dashboard,
+                              │                              │  Notification Centre
+  Consultation History        │  Appointment Confirmation,   │  Doctor Profile, Book Consult
+                              │  Settings Hub                │
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Settings Hub                │  Main Dashboard              │  All settings sub-pages
+  User Profile                │  Settings Hub                │  Settings Hub
+  Security Audit              │  Settings Hub                │  Change Password, Login
+  Data Privacy                │  Settings Hub                │  Privacy Policy, Data Consent,
+                              │                              │  Delete Account
+  Notification Settings       │  Settings Hub, Notif. Centre │  Settings Hub
+  Change Password             │  Settings Hub, Security Audit│  Login
+  Delete Account              │  Settings Hub, Data Privacy  │  Logout Confirmation
+  Logout Confirmation         │  Settings Hub, Delete Account│  Landing Page
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Notification Centre         │  Dashboard, Push tap,        │  Alert Details, Emergency Alert,
+                              │  Appt. Confirmation          │  Notif. History, Notif. Settings
+  Notification History        │  Notification Centre         │  Alert Details
+  Alert Details               │  Notif. Centre, Notif. Hist.,│  AI Insights, Risk Explan.,
+                              │  Health Timeline             │  Book Consultation, Dashboard
+  Emergency Alert             │  Notification Centre         │  Book Consultation, Emergency
+                              │  (critical severity)         │  Services (ext.), Dashboard
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Help Center Home            │  Landing Page, Settings Hub  │  Help Center Search, Article
+  Help Center Search          │  Help Center Home            │  Help Center Article, Home
+  Help Center Article         │  Home, Search                │  Home, Search, Book Consultation
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Terms of Service            │  Landing Page, Sign Up       │  Sign Up, Landing Page
+  Privacy Policy              │  Landing Page, Sign Up,      │  Data Consent, Sign Up
+                              │  Data Privacy                │
+  Data Consent                │  Privacy Policy, Sign Up,    │  Onboarding Step 1, Settings Hub
+                              │  Onboarding Step 1           │
+  ────────────────────────────┼──────────────────────────────┼──────────────────────────────────
+  Loading Screen              │  App cold launch             │  Landing Page, Main Dashboard
+  System Status               │  Any page (outage), Settings │  Previous page, Dashboard,
+                              │                              │  Maintenance Page
+  What's New                  │  Dashboard, Settings Hub     │  Main Dashboard
+  404 Error Page              │  Invalid URL                 │  Landing Page, Main Dashboard
+  500 Error Page              │  Server error, OCR failure   │  Landing Page, System Status
+  Maintenance Page            │  Server maintenance flag     │  Landing Page
+  ────────────────────────────┴──────────────────────────────┴──────────────────────────────────
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  END OF DOCUMENT                                                             ║
+║  ArogyaAI — Page Flow & Navigation Structure                                 ║
+║  Total pages: 58  |  Modules: 11  |  Conditional flows: 8                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝ 
